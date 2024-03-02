@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+
+  postgres:
+
+    image: postgres:latest
+
+    restart: always
+
+    environment:
+
+      POSTGRES_DB: expo_db
+
+      POSTGRES_USER: expo_admin
+
+      POSTGRES_PASSWORD: expo_password
+
+    ports:
+      - "5439:5432"
