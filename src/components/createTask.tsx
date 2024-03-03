@@ -1,8 +1,7 @@
-'use client'
-
-import { gql, useMutation, useQuery } from "@apollo/client";
-import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, useDisclosure } from '@chakra-ui/react';
-import React from "react";
+import { gql, useMutation } from "@apollo/client";
+import { Button, useDisclosure } from "@chakra-ui/react";
+import React, { FormEvent, useRef, useState } from "react";
+import TaskModal from "./taskModal";
 
 const CREATE_TASK_MUTATION = gql`
   mutation CreateTask($title: String!, $completed: Boolean!, $description: String!, $dueDate: String!, $priority: Priority!) {
@@ -17,25 +16,41 @@ const CREATE_TASK_MUTATION = gql`
   }
 `;
 
-export default function CreateTaskComponent() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+export default function CreateTask() {
+    const [isOpen, setIsOpen] = useState(false);
+    const { isOpen: isModalOpen, onOpen, onClose } = useDisclosure();
+    const initialRef = useRef(null);
+    const finalRef = useRef(null);
     const [createTask] = useMutation(CREATE_TASK_MUTATION);
 
-    const initialRef = React.useRef(null);
-    const finalRef = React.useRef(null);
-
-    const handleSubmit = async (e: any) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
-            const title = e.target.title.value;
-            const description = e.target.description.value;
-            const dueDate = new Date(e.target.dueDate.value).toISOString(); // Formatea la fecha como ISO-8601
-            const priority = e.target.priority.value;
+            
+          
 
-            await createTask({
-                variables: { title, completed: false, description, dueDate, priority }
-            });
+            const formData = new FormData(e.target as HTMLFormElement);
+            const title = formData.get('title') as String;
+            const description = formData.get('description') as string;
+            //const dueDate = formData.get('dueDate') as string;
+            const dueDate = new Date(formData.get('dueDate') as string).toISOString();
+            
+            const priority = formData.get('priority') as string;
+
+          
+            const data = {
+                title,
+                completed: false,
+                description,
+                dueDate,
+                priority 
+            };
+            
+            console.log('Data:', data);
+            await createTask({ variables: data });
+            
+            
 
             onClose();
         } catch (error: any) {
@@ -44,56 +59,16 @@ export default function CreateTaskComponent() {
     };
 
     return (
-        <>
-            <Button onClick={onOpen}>Open Modal</Button>
-
-            <Modal
-                initialFocusRef={initialRef}
-                finalFocusRef={finalRef}
-                isOpen={isOpen}
+        <div>
+            <Button onClick={onOpen}>Create new task</Button>
+            <TaskModal
+                isOpen={isModalOpen}
                 onClose={onClose}
-            >
-                <ModalOverlay />
-                <ModalContent>
-                    <form onSubmit={handleSubmit}> {/* Envuelve el contenido del modal con un formulario */}
-                        <ModalHeader>Create Task</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody pb={6}>
-                            <FormControl>
-                                <FormLabel>Title</FormLabel>
-                                <Input ref={initialRef} name="title" placeholder='Enter task title' /> {/* Agrega el atributo name */}
-                            </FormControl>
-
-                            <FormControl mt={4}>
-                                <FormLabel>Description</FormLabel>
-                                <Input name="description" placeholder='Enter task description' />
-                            </FormControl>
-
-                            <FormControl mt={4}>
-                                <FormLabel>Due Date</FormLabel>
-                                <Input name='dueDate' type='date' />
-                            </FormControl>
-
-                            <FormControl mt={4}>
-                                <FormLabel>Priority</FormLabel>
-                                <Select name='priority' placeholder='Select priority'>
-                                    <option value='HIGH'>High</option>
-                                    <option value='NORMAL'>Normal</option>
-                                    <option value='LOW'>Low</option>
-                                </Select>
-                            </FormControl>
-
-                        </ModalBody>
-
-                        <ModalFooter>
-                            <Button colorScheme='blue' mr={3} type='submit'>
-                                Save
-                            </Button>
-                            <Button onClick={onClose}>Cancel</Button>
-                        </ModalFooter>
-                    </form>
-                </ModalContent>
-            </Modal>
-        </>
+                handleSubmit={handleSubmit}
+                buttonName="Create Task"
+                initialRef={initialRef}
+                finalRef={finalRef}
+            />
+        </div>
     );
 }

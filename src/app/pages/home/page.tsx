@@ -1,11 +1,12 @@
 'use client'
 
-import CreateTaskComponent from "@/components/createTask";
+
 import GetTaskList from "@/components/getTastList";
+import CreateTask from "@/components/createTask";
 
 export default function Home(){
     return <>
         <GetTaskList></GetTaskList>
-        <CreateTaskComponent />
+        <CreateTask />
     </>
 }
