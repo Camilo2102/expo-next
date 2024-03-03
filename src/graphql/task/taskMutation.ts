@@ -1,4 +1,5 @@
 import { Task } from "@prisma/client";
+import prisma from "../../lib/prisma";
 
 export const taskMutation = {
     createTask: async (_: Task, data: Task) => {

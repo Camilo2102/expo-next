@@ -1,3 +1,5 @@
+'use client'
+
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, useDisclosure } from '@chakra-ui/react';
 import React from "react";

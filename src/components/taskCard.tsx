@@ -1,3 +1,5 @@
+'use client'
+
 import { Task } from "@prisma/client";
 import { Badge, Box, Card, CardBody, CardHeader, Heading, Text } from '@chakra-ui/react';
 
