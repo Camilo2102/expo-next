@@ -25,7 +25,7 @@ export default function GetTaskList() {
     return (
         <Stack spacing='4'>
            {data.tasks.map((task: Task) => (
-            <TaskCard task={task}></TaskCard>
+            <TaskCard task={task} key={"card-"+task.id}></TaskCard>
            ))}
         </Stack>
     )

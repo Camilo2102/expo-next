@@ -1,9 +1,11 @@
 import prisma from '../lib/prisma'
+import { taskMutation } from './task/taskMutation';
+
+import { taskQuery } from './task/taskQuery';
+
 
 export const resolvers = {
-  Query: {
-    tasks: () => {
-      return prisma.task.findMany()
-    },
-  },
-}
+  Query: {...taskQuery},
+  Mutation: {...taskMutation}
+
+};
