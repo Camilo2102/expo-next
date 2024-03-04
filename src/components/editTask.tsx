@@ -79,6 +79,7 @@ export default function UpdateTask({ task }: { task: Task }) {
                 buttonName="Save Changes"
                 handleSubmit={handleUpdateTask}
                 task={task}
+                isEnabled={true}
             />
         </div>
     );

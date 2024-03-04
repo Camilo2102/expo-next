@@ -52,7 +52,7 @@ export default function TaskCard({ task }: { task: Task }) {
         onClose={handleCloseModal}
         title="Task Details"
         task={task}
-        isEditable={false}
+        isEnabled={false}
       />
       
     </div>
