@@ -6,7 +6,7 @@ import {ApolloProvider} from "@apollo/client";
 import apolloClient from '../lib/apollo'
 
 export default function MainProvider({ children }: { children: React.ReactNode }) {
-    console.log(apolloClient)
+    //console.log(apolloClient)
 
     return (
         <ChakraProvider>

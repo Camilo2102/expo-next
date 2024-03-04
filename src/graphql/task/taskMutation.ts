@@ -17,5 +17,25 @@ export const taskMutation = {
         } catch (error: any) {
             throw new Error(`Error creating task: ${error.message}`);
         }
-    }
+    },
+    updateTask: async (_: any, { id, data }: { id: string, data: Task}) => {
+
+        try {
+            const updatedTask = await prisma.task.update({
+                where: {
+                    id
+                },
+                data: {
+                    title: data.title,
+                    description: data.description,
+                    completed: data.completed,
+                    dueDate: data.dueDate,
+                    priority: data.priority
+                }
+            });
+            return updatedTask;
+        } catch (error: any) {
+            throw new Error(`Error updating task: ${error.message}`);
+        }
+    },
 }

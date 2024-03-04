@@ -41,8 +41,10 @@ export const typeDefs = `
   
   type Mutation {
     createTask(data: CreateTaskInput!): Task! 
-    updateTask(data: UpdateTaskInput!, where: TaskWhereUniqueInput!): Task
+    updateTask(id: ID!, data: UpdateTaskInput!): Task
     deleteTask(where: TaskWhereUniqueInput!): Task  
   }
   
 `
+
+//updateTask(data: UpdateTaskInput!, where: TaskWhereUniqueInput!): Task
