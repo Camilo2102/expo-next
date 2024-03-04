@@ -33,7 +33,7 @@ export default function CreateTask() {
             const formData = new FormData(e.target as HTMLFormElement);
             const title = formData.get('title') as String;
             const description = formData.get('description') as string;
-            //const dueDate = formData.get('dueDate') as string;
+            
             const dueDate = new Date(formData.get('dueDate') as string).toISOString();
             
             const priority = formData.get('priority') as string;
@@ -65,9 +65,8 @@ export default function CreateTask() {
                 isOpen={isModalOpen}
                 onClose={onClose}
                 handleSubmit={handleSubmit}
+                title="Create Task"
                 buttonName="Create Task"
-                initialRef={initialRef}
-                finalRef={finalRef}
             />
         </div>
     );
