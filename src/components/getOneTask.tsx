@@ -6,11 +6,14 @@ import { useRef, useState } from "react";
 import TaskModal from "./taskModal";
 
 const getOneQuery = gql`
-  query GetTask($id: String!) {
+  query {
     task(where: { id: $id }) {
       id
-      title
+      dueDate
       description
+      completed
+      priority
+      title
     }
   }
 `;
@@ -25,16 +28,21 @@ export default function GetOneTask({ id }: { id: string }) {
   const initialRef = useRef(null);
   const finalRef = useRef(null);
 
+  const [isEnabled, setIsEnabled] = useState(false)
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Oh no... {error.message}</p>;
+
+  const task = data?.task;
 
   return (
     <TaskModal
       isOpen={isModalOpen}
       onClose={onClose}
-      buttonName="Create Task"
-      initialRef={initialRef}
-      finalRef={finalRef}
+      buttonName="OK Task"
+      title="Info Task"
+      task={task}
+      isEnabled={isEnabled}
     />
   );
 }

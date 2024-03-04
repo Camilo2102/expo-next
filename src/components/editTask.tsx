@@ -59,7 +59,7 @@ export default function UpdateTask({ task }: { task: Task }) {
                 priority
             };
 
-            await updateTask({ variables: { id: idTask, data, idtask:"kkkkkkkkk" } });
+            await updateTask({ variables: { id: idTask, data } });
 
             closeEditModal();
         } catch (error: any) {

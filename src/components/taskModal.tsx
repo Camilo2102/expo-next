@@ -13,11 +13,12 @@ interface ModalTaskProps {
     buttonName?: string;
     task?: Task;
     title: string;
+    isEnabled: boolean;
 }
 
 
 
-export default function TaskModal({ isOpen, onClose, handleSubmit, buttonName, title, task }: ModalTaskProps) {
+export default function TaskModal({ isOpen, onClose, handleSubmit, buttonName, title, task, isEnabled}: ModalTaskProps) {
 
     const initialTitle = task ? task.title : '';
     const initialDescription = task ? task.description : '';
@@ -42,22 +43,22 @@ export default function TaskModal({ isOpen, onClose, handleSubmit, buttonName, t
                         <Stack spacing={4}>
                             <FormControl>
                                 <FormLabel>Title</FormLabel>
-                                <Input name="title" defaultValue={initialTitle} />
+                                <Input name="title" defaultValue={initialTitle} readOnly={!isEnabled}/>
                             </FormControl>
 
                             <FormControl>
                                 <FormLabel>Description</FormLabel>
-                                <Input name="description" defaultValue={initialDescription} />
+                                <Input name="description" defaultValue={initialDescription||""} readOnly={!isEnabled}/>
                             </FormControl>
 
                             <FormControl>
                                 <FormLabel>Due Date</FormLabel>
-                                <Input name="dueDate" type="date" defaultValue={initialDueDate} />
+                                <Input name="dueDate" type="date" defaultValue={initialDueDate} readOnly={!isEnabled}/>
                             </FormControl>
 
                             <FormControl>
                                 <FormLabel>Priority</FormLabel>
-                                <Select name='priority' placeholder='Select priority' defaultValue={initialPriority}>
+                                <Select name='priority' placeholder='Select priority' defaultValue={initialPriority} isDisabled={!isEnabled}>
                                     <option value='HIGH'>High</option>
                                     <option value='NORMAL'>Normal</option>
                                     <option value='LOW'>Low</option>

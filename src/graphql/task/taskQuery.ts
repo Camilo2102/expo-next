@@ -4,7 +4,7 @@ export const taskQuery = {
   tasks: () => {
     return prisma.task.findMany();
   },
-  task: (id: string) => {
+  task: (_: any, { id }: { id: string}) => {
     return prisma.task.findUnique({
       where: {
         id: id,

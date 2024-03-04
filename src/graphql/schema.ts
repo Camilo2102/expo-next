@@ -36,7 +36,7 @@ export const typeDefs = `
   
   type Query {
     tasks: [Task!]!
-    task(where: TaskWhereUniqueInput): [Task!]!
+    task(id: ID!): Task!
   }
   
   type Mutation {
