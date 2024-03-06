@@ -13,7 +13,7 @@ export const taskMutation = {
             },
         });
     },
-    updateTask: (_: any, { id, data }: { id: string, data: Task}) => {
+    updateTask: (_: any, { id, data }: { id: string, data: Task }) => {
         return prisma.task.update({
             where: {
                 id
@@ -27,4 +27,13 @@ export const taskMutation = {
             }
         });
     },
+    deleteTask: (_: any, { id }: { id: string }) => {
+        return prisma.task.delete(
+            {
+                where: {
+                    id
+                }
+            }
+        )
+    }
 }

@@ -7,7 +7,7 @@ import { EditIcon } from "@chakra-ui/icons";
 import { useReloadContext } from "../context/taskContext";
 
 const UPDATE_TASK_MUTATION = gql`
-  mutation MyMutation($id: ID!, $data: UpdateTaskInput!) {
+  mutation ($id: ID!, $data: UpdateTaskInput!) {
     updateTask(
       id: $id,
       data: $data
@@ -44,7 +44,7 @@ export default function UpdateTask({ task }: { task: Task }) {
 
     const {reloadTable} = useReloadContext();
 
-    const handleUpdateTask = (task: Task) => {
+    const handleUpdateTask = async (task: Task) => {
         try {
             const taskData: taskUpdate = {
                 title: task.title,
@@ -53,7 +53,7 @@ export default function UpdateTask({ task }: { task: Task }) {
                 dueDate: task.dueDate,
                 priority: task.priority
               };
-            updateTask({ variables: { id: task.id, data: taskData } });
+            await updateTask({ variables: { id: task.id, data: taskData } });
             reloadTable();
             closeEditModal();
         } catch (error: any) {
