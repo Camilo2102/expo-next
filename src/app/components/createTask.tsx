@@ -2,6 +2,8 @@ import { gql, useMutation } from "@apollo/client";
 import { Button, useDisclosure } from "@chakra-ui/react";
 import React, { FormEvent, useRef, useState } from "react";
 import TaskModal from "./taskModal";
+import { useReloadContext } from "../context/taskContext";
+import { Task } from "@prisma/client";
 
 const CREATE_TASK_MUTATION = gql`
   mutation CreateTask($title: String!, $completed: Boolean!, $description: String!, $dueDate: String!, $priority: Priority!) {
@@ -23,35 +25,13 @@ export default function CreateTask() {
     const finalRef = useRef(null);
     const [createTask] = useMutation(CREATE_TASK_MUTATION);
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const {reloadTable} = useReloadContext();
 
+    const handleSubmit = async (task: Task) => {
         try {
+            await createTask({ variables: task });
             
-          
-
-            const formData = new FormData(e.target as HTMLFormElement);
-            const title = formData.get('title') as String;
-            const description = formData.get('description') as string;
-            
-            const dueDate = new Date(formData.get('dueDate') as string).toISOString();
-            
-            const priority = formData.get('priority') as string;
-
-          
-            const data = {
-                title,
-                completed: false,
-                description,
-                dueDate,
-                priority 
-            };
-            
-            console.log('Data:', data);
-            await createTask({ variables: data });
-            
-            
-
+            reloadTable();
             onClose();
         } catch (error: any) {
             console.error('Error creating task:', error.message);
@@ -60,13 +40,14 @@ export default function CreateTask() {
 
     return (
         <div>
-            <Button onClick={onOpen}>Create new task</Button>
+            <Button onClick={onOpen} colorScheme='whatsapp'>Crear tarea</Button>
             <TaskModal
                 isOpen={isModalOpen}
                 onClose={onClose}
                 handleSubmit={handleSubmit}
-                title="Create Task"
-                buttonName="Create Task"
+                title="Crear tarea"
+                buttonName="Crear"
+                isEnabled={true}
             />
         </div>
     );

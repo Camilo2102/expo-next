@@ -9,9 +9,9 @@ export const typeDefs = `
   }
   
   enum Priority {
-    HIGH
+    ALTA
     NORMAL
-    LOW  
+    BAJO 
   }
   
   input TaskWhereUniqueInput {

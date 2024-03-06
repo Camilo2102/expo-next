@@ -2,7 +2,9 @@ import { gql, useMutation } from "@apollo/client";
 import { Button, Flex } from "@chakra-ui/react";
 import TaskModal from "./taskModal";
 import { FormEvent, useState } from "react";
-import { Task } from "@prisma/client";
+import { Priority, Task } from "@prisma/client";
+import { EditIcon } from "@chakra-ui/icons";
+import { useReloadContext } from "../context/taskContext";
 
 const UPDATE_TASK_MUTATION = gql`
   mutation MyMutation($id: ID!, $data: UpdateTaskInput!) {
@@ -20,7 +22,13 @@ const UPDATE_TASK_MUTATION = gql`
   }
 `;
 
-
+type taskUpdate = {
+    title: string
+    description: string | null
+    completed: boolean
+    dueDate: string | null
+    priority: Priority
+}
 
 export default function UpdateTask({ task }: { task: Task }) {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -34,33 +42,19 @@ export default function UpdateTask({ task }: { task: Task }) {
         setIsEditModalOpen(false);
     };
 
-    const handleUpdateTask = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const {reloadTable} = useReloadContext();
 
+    const handleUpdateTask = (task: Task) => {
         try {
-           
-            const idTask = task.id;
-            
-            console.log(idTask);
-            
-
-            const formData = new FormData(e.target as HTMLFormElement);
-            const title = formData.get('title') as string;
-            const description = formData.get('description') as string;
-            const dueDate = new Date(formData.get('dueDate') as string).toISOString();
-            const priority = formData.get('priority') as string;
-            const completed = task.completed;
-
-            const data = {
-                title,
-                description,
-                dueDate,
-                completed,
-                priority
-            };
-
-            await updateTask({ variables: { id: idTask, data } });
-
+            const taskData: taskUpdate = {
+                title: task.title,
+                description: task.description,
+                completed: task.completed,
+                dueDate: task.dueDate,
+                priority: task.priority
+              };
+            updateTask({ variables: { id: task.id, data: taskData } });
+            reloadTable();
             closeEditModal();
         } catch (error: any) {
             console.error('Error updating task:', error.message);
@@ -69,8 +63,8 @@ export default function UpdateTask({ task }: { task: Task }) {
 
     return (
         <div>
-            <Button colorScheme='blue' onClick={openEditModal}>
-                Edit
+            <Button colorScheme='blue' leftIcon={<EditIcon/>} onClick={openEditModal}>
+                Editar
             </Button>
             <TaskModal
                 isOpen={isEditModalOpen}
